@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>VCE ATAR & Study Scores 2025 Countdown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite"/>
+    <style>
+        html {
+            font-family: "Kode Mono", monospace;
+            background-color: black;
+            font-weight: 400;
+            font-size: x-large;
+            font-style: normal;
+            color: whitesmoke;
+        }
+
+        h1 {
+            margin-bottom: -10px;
+        }
+
+        h3 {
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+
+        footer {
+            font-size: medium;
+        }
+
+        i {
+            font-size: x-small;
+            margin: 0 0 0 0;
+        }
+
+        .alink {
+            font-weight: 600;
+            text-decoration: none;
+            font-size: medium;
+            color: whitesmoke;
+        }
+
+        .inline {
+            display: inline-flex;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="justify-content: center; text-align: center;">
+    <img src="loading.gif" alt="coming soon to a university near you.">
+    <h1 id="timer">DD:HH:MM:SS</h1>
+    <small>dd:hh:mm:ss</small><br/><br/>
+    <a href="https://resultsandatar.vic.edu.au/" class="alink" target="_blank"><h3>Check your 2025 VCE ATAR</h3></a>
+</div>
+<!-- stop snooping around -->
+<div class="footer" style="text-align: center;">
+    <br/><br/>
+    <footer>
+        Your 2025 ATAR and study scores release at 07:00:00, 11 December 2025 (UTC+11)<br/>
+        Made with <span style="color: red" class="material-symbols-outlined inline">favorite</span> by <a
+            target="_blank" class="alink"
+            href="https://bobbedbob.io/">bobbedbob</a>.
+    </footer>
+</div>
+<script>
+    const countDownDate = new Date(1765396800000).getTime();
+
+    const x = setInterval(function () {
+        const now = Date.now()
+        const rawDistance = countDownDate - now
+
+        if (rawDistance <= 0) {
+            const zeroStr = "00:00:00:00.000"
+            const timerEl = document.getElementById("timer")
+            const subTimerEl = document.getElementById("submission_timer")
+            if (timerEl) timerEl.innerHTML = zeroStr
+            if (subTimerEl) subTimerEl.innerHTML = zeroStr
+            clearInterval(x)
+            return
+        }
+
+        let distance = rawDistance
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        distance %= (1000 * 60 * 60 * 24)
+
+        const hours = Math.floor(distance / (1000 * 60 * 60))
+        distance %= (1000 * 60 * 60)
+
+        const minutes = Math.floor(distance / (1000 * 60))
+        distance %= (1000 * 60)
+
+        const seconds = Math.floor(distance / 1000)
+        const milliseconds = distance % 1000
+
+        let time_str = String(days).padStart(2, "0") + ":"
+        time_str += String(hours).padStart(2, "0") + ":"
+        time_str += String(minutes).padStart(2, "0") + ":"
+        time_str += String(seconds).padStart(2, "0") + "."
+        time_str += String(milliseconds).padStart(3, "0")
+
+        const timerEl = document.getElementById("timer")
+        const subTimerEl = document.getElementById("submission_timer")
+        if (timerEl) timerEl.innerHTML = time_str
+        if (subTimerEl) subTimerEl.innerHTML = time_str
+    }, 50)
+</script>
+</body>
+</html>
