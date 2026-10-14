@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="allroadsleadtorome.jpg">
-    <title>VCE ATAR & Study Scores 2025 Countdown</title>
-    <meta property="og:title" content="2025 VCE ATAR & Study Scores Countdown"/>
+    <title>VCE Exams 2026 Countdown</title>
+    <meta property="og:title" content="2026 VCE Exams Countdown"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://atar.bobbedbob.io/"/>
     <meta property="og:image" content="allroadsleadtorome.jpg"/>
@@ -55,70 +55,261 @@
             display: inline-flex;
             vertical-align: top;
         }
+
+        .btn {
+            font-family: inherit;
+            font-size: medium;
+            color: whitesmoke;
+            background: none;
+            border: 1px solid whitesmoke;
+            padding: 4px 12px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .btn:hover, .btn:focus-visible {
+            background-color: #222;
+        }
+
+        dialog {
+            font-family: inherit;
+            font-size: medium;
+            color: whitesmoke;
+            background-color: black;
+            border: 1px solid whitesmoke;
+            width: min(600px, calc(100vw - 32px));
+            max-height: 80vh;
+            box-sizing: border-box;
+        }
+
+        dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        dialog h3 {
+            margin-bottom: 10px;
+        }
+
+        #exam_search {
+            font: inherit;
+            color: whitesmoke;
+            background-color: black;
+            border: 1px solid whitesmoke;
+            padding: 6px 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #exam_list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            max-height: 50vh;
+            overflow-y: auto;
+            scrollbar-color: grey black;
+        }
+
+        #exam_list button {
+            font: inherit;
+            color: whitesmoke;
+            background: none;
+            border: none;
+            width: 100%;
+            padding: 6px 8px;
+            display: flex;
+            justify-content: space-between;
+            gap: 1em;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        #exam_list button:hover, #exam_list button:focus-visible {
+            background-color: #222;
+        }
+
+        #exam_list button[aria-current="true"] {
+            font-weight: 600;
+        }
+
+        #exam_list button[aria-current="true"] span::before {
+            content: "> ";
+        }
+
+        #exam_list small {
+            color: grey;
+            white-space: nowrap;
+        }
+
+        #side_clocks {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 280px;
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+            scrollbar-color: grey black;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: medium;
+            text-align: left;
+        }
+
+        #side_clocks li {
+            position: relative;
+            border: 1px solid whitesmoke;
+            background-color: black;
+            margin-bottom: 10px;
+        }
+
+        .side_focus {
+            display: block;
+            width: 100%;
+            padding: 8px 10px;
+            font: inherit;
+            color: whitesmoke;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .side_focus:hover, .side_focus:focus-visible {
+            background-color: #222;
+        }
+
+        /* exam has started, same green as the hourglass */
+        #side_clocks li.done {
+            border-color: #099c0a;
+        }
+
+        #side_clocks li.done .side_focus {
+            color: #099c0a;
+        }
+
+        .side_name {
+            display: block;
+            font-weight: 600;
+            padding-right: 1.5em;
+        }
+
+        .side_time {
+            display: block;
+            font-size: large;
+        }
+
+        #side_clocks small {
+            color: grey;
+        }
+
+        .side_remove {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            font: inherit;
+            color: grey;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .side_remove:hover, .side_remove:focus-visible {
+            color: whitesmoke;
+        }
+
+        /* not enough room on the side, so they sit under the main clock instead */
+        @media (max-width: 1100px) {
+            #side_clocks {
+                position: static;
+                width: auto;
+                max-width: 400px;
+                max-height: none;
+                margin: 30px auto 0;
+                padding: 0 16px;
+            }
+        }
+
+        .ad {
+            display: inline-block;
+            max-width: min(480px, calc(100vw - 32px));
+            box-sizing: border-box;
+            margin-top: 25px;
+            padding: 6px 16px 7px;
+            border: 1px solid #099c0a; /* same green as the hourglass */
+            border-radius: 14px;
+            font-size: small;
+            line-height: 1.45;
+            color: #aaa;
+            text-decoration: none;
+            /* even line lengths instead of a stray word on the last line */
+            text-wrap: balance;
+        }
+
+        .ad:hover, .ad:focus-visible {
+            border-color: #1fd11f;
+            color: whitesmoke;
+        }
+
+        .ad_label {
+            display: block;
+            font-size: x-small;
+            letter-spacing: 1px;
+            color: #099c0a;
+        }
+
+        .ad_word {
+            white-space: nowrap;
+        }
+
+        .ad:hover .ad_char {
+            color: whitesmoke;
+        }
+
+        /* hourglasses set loose by clicking the main one */
+        .bouncer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 <div class="container" style="justify-content: center; text-align: center;">
-    <img src="loading.gif" alt="coming soon to a university near you.">
+    <img src="loading.gif" id="hourglass" alt="coming soon to a university near you.">
     <h1 id="timer">DD:HH:MM:SS</h1>
     <small>dd:hh:mm:ss</small><br/><br/>
-    <a href="https://resultsandatar.vic.edu.au/" class="alink" target="_blank"><h3>Check your 2025 VCE ATAR</h3></a>
+    <a href="https://vcaa.vic.edu.au/administration/key-dates/vce-examination-timetable" class="alink" target="_blank">
+        <h3 id="exam_name">2026 VCE examination timetable</h3></a>
+    <button type="button" class="btn" id="exam_pick">pick your exam</button>
+    <button type="button" class="btn" id="side_add">add side clocks</button>
+    <br/>
+    <a href="https://classani.org/?ref=atar.bobbedbob.io"
+       class="ad" target="_blank" rel="sponsored noopener">
+        <small class="ad_label">SELF PROMO</small>
+        <span class="ad_text">want to tutor? find students, run classes, get paid, all in one. no agency, no cut. free on Classani.</span>
+    </a>
 </div>
+<ul id="side_clocks" aria-label="Side clocks" hidden></ul>
+<dialog id="exam_modal" aria-labelledby="exam_modal_title">
+    <h3 id="exam_modal_title">Which exam are you counting down to?</h3>
+    <input type="search" id="exam_search" placeholder="search exams..." autocomplete="off" aria-label="Search exams">
+    <ul id="exam_list"></ul>
+    <button type="button" class="btn" id="exam_close">close</button>
+</dialog>
 <!-- stop snooping around -->
 <div class="footer" style="text-align: center;">
     <br/><br/>
     <footer>
-        Your 2025 ATAR and study scores release at 07:00:00, 11 December 2025 (UTC+11)<br/>
+        <span id="exam_info">2026 VCE written exams run from 15 October to 18 November 2026</span><br/>
         Made with <span style="color: red" class="material-symbols-outlined inline">favorite</span> by <a
             target="_blank" class="alink"
             href="https://bobbedbob.io/">bobbedbob</a>.
         <br/>
-        <br/>
         <img src="allroadsleadtorome.jpg" width="100" height="126" alt="coming soon to a university near you.">
-    </footer>
+        <br/></footer>
 </div>
-<script>
-    const countDownDate = new Date(1765512000000).getTime();
-
-    const x = setInterval(function () {
-        const now = Date.now()
-        const rawDistance = countDownDate - now
-
-        if (rawDistance <= 0) {
-            const zeroStr = "00:00:00:00.000"
-            const timerEl = document.getElementById("timer")
-            const subTimerEl = document.getElementById("submission_timer")
-            if (timerEl) timerEl.innerHTML = zeroStr
-            if (subTimerEl) subTimerEl.innerHTML = zeroStr
-            clearInterval(x)
-            return
-        }
-
-        let distance = rawDistance
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-        distance %= (1000 * 60 * 60 * 24)
-
-        const hours = Math.floor(distance / (1000 * 60 * 60))
-        distance %= (1000 * 60 * 60)
-
-        const minutes = Math.floor(distance / (1000 * 60))
-        distance %= (1000 * 60)
-
-        const seconds = Math.floor(distance / 1000)
-        const milliseconds = distance % 1000
-
-        let time_str = String(days).padStart(2, "0") + ":"
-        time_str += String(hours).padStart(2, "0") + ":"
-        time_str += String(minutes).padStart(2, "0") + ":"
-        time_str += String(seconds).padStart(2, "0") + "."
-        time_str += String(milliseconds).padStart(3, "0")
-
-        const timerEl = document.getElementById("timer")
-        const subTimerEl = document.getElementById("submission_timer")
-        if (timerEl) timerEl.innerHTML = time_str
-        if (subTimerEl) subTimerEl.innerHTML = time_str
-    }, 50)
-</script>
+<script src="countdown.js"></script>
 </body>
 </html>
