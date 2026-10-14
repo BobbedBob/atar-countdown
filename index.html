@@ -222,7 +222,7 @@
         .side_name {
             display: block;
             font-weight: 600;
-            padding-right: 1.5em;
+            padding-right: 2em;
         }
 
         .side_time {
@@ -236,9 +236,14 @@
 
         .side_remove {
             position: absolute;
-            top: 4px;
-            right: 6px;
+            /* centred on the first line of the exam name */
+            top: 18px;
+            right: 2px;
+            transform: translateY(-50%);
+            padding: 6px 8px;
             font: inherit;
+            font-size: 20px;
+            line-height: 1;
             color: grey;
             background: none;
             border: none;
@@ -265,18 +270,19 @@
         .plug {
             position: relative;
             display: inline-block;
-            max-width: min(480px, calc(100vw - 32px));
+            max-width: min(400px, calc(100vw - 32px));
             box-sizing: border-box;
             margin-top: 25px;
             /* room on both sides for the collapse button, so the text stays centred */
-            padding: 6px 28px 7px;
+            padding: 6px 38px 7px;
             border: 1px solid #099c0a; /* same green as the hourglass */
             border-radius: 14px;
             font-size: small;
             line-height: 1.45;
             color: #aaa;
-            /* even line lengths instead of a stray word on the last line */
-            text-wrap: balance;
+            /* no stray word on the last line. not "balance", which shortens every line and leaves the box
+               wider than its text */
+            text-wrap: pretty;
         }
 
         .plug:hover, .plug:focus-within {
@@ -309,10 +315,13 @@
 
         .plug_toggle {
             position: absolute;
-            top: 3px;
-            right: 8px;
-            padding: 2px 4px;
+            /* centred on the "SELF PROMO" line */
+            top: 13px;
+            right: 4px;
+            transform: translateY(-50%);
+            padding: 6px 8px;
             font: inherit;
+            font-size: 20px;
             line-height: 1;
             color: grey;
             background: none;
@@ -326,7 +335,7 @@
 
         /* collapsed down to a small "SELF PROMO" pill */
         .plug.collapsed {
-            padding: 2px 28px 2px 12px;
+            padding: 5px 38px 5px 14px;
             border-radius: 999px;
         }
 
@@ -336,7 +345,6 @@
 
         .plug.collapsed .plug_toggle {
             top: 50%;
-            transform: translateY(-50%);
         }
 
         /* hourglasses set loose by clicking the main one */
