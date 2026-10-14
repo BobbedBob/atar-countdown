@@ -223,6 +223,10 @@ function tick() {
 let x
 
 function restart() {
+    // only an exam that's been picked can be shoved to the side, not "whatever's next"
+    const shoveEl = document.getElementById("side_shove")
+    if (shoveEl) shoveEl.hidden = !trackedExam
+
     clearInterval(x)
     tick()
     x = setInterval(tick, 50)
@@ -245,6 +249,15 @@ function toggleSideExam(exam) {
     saveSideExams()
     renderSideClocks()
     restart()
+}
+
+// Send the main clock's exam to the side, and go back to "whatever's next"
+function shoveTrackedExam() {
+    if (!trackedExam) return
+    sideExams = examList.filter(other => other === trackedExam || sideExams.includes(other))
+    saveSideExams()
+    renderSideClocks()
+    trackExam(null)
 }
 
 // Swap a side clock with the main clock
@@ -312,6 +325,8 @@ if (systemPickEl) {
         restart()
     })
 }
+
+document.getElementById("side_shove")?.addEventListener("click", shoveTrackedExam)
 
 // Exam picker modal, used both for the main clock ("track") and the side clocks ("side")
 const modal = document.getElementById("exam_modal")
