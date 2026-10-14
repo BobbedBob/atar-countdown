@@ -30,6 +30,12 @@
             margin-bottom: -10px;
         }
 
+        /* shrinks so all 15 characters fit across a phone screen (each is about 0.6em wide) */
+        #timer {
+            font-size: min(2em, calc((100vw - 32px) / 9));
+            white-space: nowrap;
+        }
+
         h3 {
             margin-top: 5px;
             margin-bottom: 0;
