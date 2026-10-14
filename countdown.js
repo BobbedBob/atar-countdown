@@ -71,7 +71,12 @@ const EXAMS = [
 
     {start: "2026-11-18T09:00:00+11:00", exams: ["Japanese Second Language"]},
     {start: "2026-11-18T14:00:00+11:00", exams: ["Chinese Second Language", "Chinese Second Language Advanced"]},
+
+    // Not an exam, but worth counting down to. Source: https://vtac.edu.au/dates
+    {start: "2026-12-10T07:00:00+11:00", exams: ["ATAR & study scores release"], release: true},
 ].map(session => ({...session, time: new Date(session.start).getTime()}))
+
+const RESULTS_URL = "https://resultsandatar.vic.edu.au/"
 
 const MONTHS = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"]
@@ -92,7 +97,9 @@ function formatShort(iso) {
 }
 
 // Every exam on its own, so one can be picked and tracked
-const EXAM_LIST = EXAMS.flatMap(session => session.exams.map(name => ({name, start: session.start, time: session.time})))
+const EXAM_LIST = EXAMS.flatMap(session => session.exams.map(name => ({
+    name, start: session.start, time: session.time, release: Boolean(session.release),
+})))
 
 const STORAGE_KEY = "trackedExam"
 const SIDE_STORAGE_KEY = "sideExams"
@@ -146,27 +153,48 @@ function setText(id, text) {
     if (el && el.textContent !== text) el.textContent = text
 }
 
+// Footer line for an exam session, or for the results release
+function startText(entry, now) {
+    const when = formatStart(entry.start)
+    if (entry.release) return (entry.time > now ? "Results will be released at " : "Results were released at ") + when
+    return (entry.time > now ? "This exam will start at " : "This exam started at ") + when
+}
+
+// The heading links to the timetable, or to the results site when that's what's being counted down to
+function setLink(release) {
+    const linkEl = document.getElementById("exam_link")
+    const href = release ? RESULTS_URL : TIMETABLE_URL
+    if (linkEl && linkEl.href !== href) linkEl.href = href
+}
+
+const TIMETABLE_URL = document.getElementById("exam_link")?.href
+
 // The time being counted down to, or null when there's nothing left to count down to
 function showTarget(now) {
     if (trackedExam) {
+        setLink(trackedExam.release)
+        setText("exam_info", startText(trackedExam, now))
         if (trackedExam.time > now) {
             setText("exam_name", "Tracking: " + trackedExam.name)
-            setText("exam_info", "This exam will start at " + formatStart(trackedExam.start))
             return trackedExam.time
         }
-        setText("exam_name", trackedExam.name + " has started. Good luck!")
-        setText("exam_info", "This exam started at " + formatStart(trackedExam.start))
+        setText("exam_name", trackedExam.release
+            ? "Results are out! Check your ATAR"
+            : trackedExam.name + " has started. Good luck!")
         return null
     }
 
     const session = nextSession(now)
     if (!session) {
-        setText("exam_name", "That's all the 2026 VCE exams. Go touch grass.")
-        setText("exam_info", "The last 2026 VCE exam started at " + formatStart(EXAMS[EXAMS.length - 1].start))
+        const last = EXAMS[EXAMS.length - 1]
+        setLink(last.release)
+        setText("exam_name", last.release ? "Results are out! Check your ATAR" : "That's all the 2026 VCE exams. Go touch grass.")
+        setText("exam_info", startText(last, now))
         return null
     }
+    setLink(session.release)
     setText("exam_name", "Next up: " + session.exams.join(", "))
-    setText("exam_info", "This exam will start at " + formatStart(session.start))
+    setText("exam_info", startText(session, now))
     return session.time
 }
 
@@ -211,7 +239,7 @@ function tick() {
         const distance = clock.exam.time - now
         const done = distance <= 0
         clock.li.classList.toggle("done", done)
-        clock.timeEl.textContent = done ? "Completed!" : formatDistance(distance)
+        clock.timeEl.textContent = done ? (clock.exam.release ? "Released!" : "Completed!") : formatDistance(distance)
         if (!done) counting = true
     }
 
@@ -390,12 +418,42 @@ if (modal) {
     })
 }
 
-// Ad glow: split the text into characters so a glow can sweep across it
-const adEl = document.querySelector(".ad")
-const adTextEl = adEl && adEl.querySelector(".ad_text")
+// Self promo. Classes are called "plug" rather than "ad" because ad blockers hide anything with an "ad" class.
+const plugEl = document.getElementById("plug")
+const plugToggleEl = document.getElementById("plug_toggle")
+const PLUG_STORAGE_KEY = "plugCollapsed"
+
+// Collapsing shrinks it down to just the label, and the choice is remembered
+function setPlugCollapsed(collapsed) {
+    plugEl.classList.toggle("collapsed", collapsed)
+    plugToggleEl.textContent = collapsed ? "+" : "×"
+    plugToggleEl.title = collapsed ? "Expand" : "Collapse"
+    plugToggleEl.setAttribute("aria-expanded", String(!collapsed))
+    try {
+        if (collapsed) localStorage.setItem(PLUG_STORAGE_KEY, "1")
+        else localStorage.removeItem(PLUG_STORAGE_KEY)
+    } catch (e) {
+        // storage unavailable, it just won't be remembered
+    }
+}
+
+if (plugEl && plugToggleEl) {
+    let collapsed = false
+    try {
+        collapsed = localStorage.getItem(PLUG_STORAGE_KEY) === "1"
+    } catch (e) {
+        // same as above
+    }
+    setPlugCollapsed(collapsed)
+    plugToggleEl.addEventListener("click", () => setPlugCollapsed(!plugEl.classList.contains("collapsed")))
+}
+
+// Glow: split the text into characters so a glow can sweep across it
+const plugLinkEl = plugEl && plugEl.querySelector(".plug_link")
+const adTextEl = plugEl && plugEl.querySelector(".plug_text")
 if (adTextEl) {
     const text = adTextEl.textContent.replace(/\s+/g, " ").trim()
-    adEl.setAttribute("aria-label", adEl.textContent.replace(/\s+/g, " ").trim())
+    plugLinkEl.setAttribute("aria-label", plugLinkEl.textContent.replace(/\s+/g, " ").trim())
     adTextEl.replaceChildren()
 
     let i = 0
@@ -406,11 +464,11 @@ if (adTextEl) {
         }
         // words don't break in the middle when wrapping on small screens
         const wordEl = document.createElement("span")
-        wordEl.className = "ad_word"
+        wordEl.className = "plug_word"
         wordEl.setAttribute("aria-hidden", "true")
         for (const char of word) {
             const charEl = document.createElement("span")
-            charEl.className = "ad_char"
+            charEl.className = "plug_char"
             charEl.dataset.i = String(i++)
             charEl.textContent = char
             wordEl.appendChild(charEl)
@@ -420,7 +478,7 @@ if (adTextEl) {
 
     // Every so often a soft light drifts across the text. Timing, speed and brightness vary a little
     // each time so it doesn't look mechanical.
-    const chars = Array.from(adTextEl.querySelectorAll(".ad_char"))
+    const chars = Array.from(adTextEl.querySelectorAll(".plug_char"))
     const base = getComputedStyle(adTextEl).color
     const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
     const random = (min, max) => min + Math.random() * (max - min)
@@ -459,11 +517,55 @@ if (adTextEl) {
     if (!reduceMotion && chars.length && chars[0].animate) setTimeout(sweep, random(500, 1500))
 }
 
-// Easter egg: every fifth click on the hourglass sets a copy loose to bounce around the screen
+// Easter egg: every fifth click on the hourglass sets a copy loose to bounce around the screen.
+// Clicking one of the loose ones pops it.
 const hourglassEl = document.getElementById("hourglass")
-const bouncers = []
+let bouncers = []
 let hourglassClicks = 0
 let lastFrame = null
+let bouncing = false
+
+// Each click wobbles the hourglass a bit harder, hinting that something happens if you keep going
+function shakeHourglass() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const progress = (hourglassClicks - 1) % 5 + 1 // 1 to 5
+    const angle = 3 + progress * 2                 // degrees
+    hourglassEl.animate([
+        {transform: "rotate(0deg)"},
+        {transform: `rotate(${-angle}deg)`},
+        {transform: `rotate(${angle}deg)`},
+        {transform: `rotate(${-angle * 0.6}deg)`},
+        {transform: `rotate(${angle * 0.3}deg)`},
+        {transform: "rotate(0deg)"},
+    ], {duration: 350, easing: "ease-in-out"})
+}
+
+// Score in the bottom left, shown after the first pop
+const scoreEl = document.getElementById("score")
+const scoreCountEl = document.getElementById("score_count")
+let score = 0
+
+function addPoint() {
+    if (!scoreEl) return
+    score++
+    scoreCountEl.textContent = String(score)
+    scoreEl.hidden = false
+    scoreEl.animate([
+        {transform: "scale(1.3)", color: "whitesmoke"},
+        {transform: "scale(1)"},
+    ], {duration: 250, easing: "ease-out"})
+}
+
+function popBouncer(b) {
+    addPoint()
+    bouncers = bouncers.filter(other => other !== b)
+    b.el.style.pointerEvents = "none"
+    const at = `translate(${b.x}px, ${b.y}px)`
+    b.el.animate([
+        {transform: at + " scale(1)", opacity: 1},
+        {transform: at + " scale(1.6)", opacity: 0},
+    ], {duration: 200, easing: "ease-out", fill: "forwards"}).onfinish = () => b.el.remove()
+}
 
 function spawnBouncer() {
     const rect = hourglassEl.getBoundingClientRect()
@@ -481,15 +583,21 @@ function spawnBouncer() {
     // head off diagonally (never close to straight across or straight down) from the main hourglass
     const speed = 200 + Math.random() * 100 // px per second
     const angle = (Math.PI / 6 + Math.random() * Math.PI / 6) + Math.floor(Math.random() * 4) * Math.PI / 2
-    bouncers.push({
+    const b = {
         el, width, height,
         x: rect.left + (rect.width - width) / 2,
         y: rect.top + (rect.height - height) / 2,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-    })
+    }
+    bouncers.push(b)
+    el.addEventListener("click", () => popBouncer(b))
 
-    if (bouncers.length === 1) requestAnimationFrame(bounce)
+    if (!bouncing) {
+        bouncing = true
+        lastFrame = null
+        requestAnimationFrame(bounce)
+    }
 }
 
 function bounce(time) {
@@ -523,12 +631,15 @@ function bounce(time) {
         b.el.style.transform = `translate(${b.x}px, ${b.y}px)`
     }
 
-    requestAnimationFrame(bounce)
+    // stop the loop once they've all been popped
+    if (bouncers.length) requestAnimationFrame(bounce)
+    else bouncing = false
 }
 
 if (hourglassEl) {
     hourglassEl.addEventListener("click", function () {
         hourglassClicks++
+        shakeHourglass()
         if (hourglassClicks % 5 === 0) spawnBouncer()
     })
 }

@@ -229,40 +229,82 @@
             }
         }
 
-        .ad {
+        /* self promo. not called "ad" since ad blockers hide anything with that class */
+        .plug {
+            position: relative;
             display: inline-block;
             max-width: min(480px, calc(100vw - 32px));
             box-sizing: border-box;
             margin-top: 25px;
-            padding: 6px 16px 7px;
+            /* room on both sides for the collapse button, so the text stays centred */
+            padding: 6px 28px 7px;
             border: 1px solid #099c0a; /* same green as the hourglass */
             border-radius: 14px;
             font-size: small;
             line-height: 1.45;
             color: #aaa;
-            text-decoration: none;
             /* even line lengths instead of a stray word on the last line */
             text-wrap: balance;
         }
 
-        .ad:hover, .ad:focus-visible {
+        .plug:hover, .plug:focus-within {
             border-color: #1fd11f;
+        }
+
+        .plug_link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .plug_link:hover, .plug_link:focus-visible {
             color: whitesmoke;
         }
 
-        .ad_label {
+        .plug_label {
             display: block;
             font-size: x-small;
             letter-spacing: 1px;
             color: #099c0a;
         }
 
-        .ad_word {
+        .plug_word {
             white-space: nowrap;
         }
 
-        .ad:hover .ad_char {
+        .plug_link:hover .plug_char {
             color: whitesmoke;
+        }
+
+        .plug_toggle {
+            position: absolute;
+            top: 3px;
+            right: 8px;
+            padding: 2px 4px;
+            font: inherit;
+            line-height: 1;
+            color: grey;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .plug_toggle:hover, .plug_toggle:focus-visible {
+            color: whitesmoke;
+        }
+
+        /* collapsed down to a small "SELF PROMO" pill */
+        .plug.collapsed {
+            padding: 2px 28px 2px 12px;
+            border-radius: 999px;
+        }
+
+        .plug.collapsed .plug_text {
+            display: none;
+        }
+
+        .plug.collapsed .plug_toggle {
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         /* hourglasses set loose by clicking the main one */
@@ -271,6 +313,19 @@
             top: 0;
             left: 0;
             z-index: 10;
+            /* click one to pop it */
+            cursor: crosshair;
+        }
+
+        /* how many have been popped */
+        .score {
+            position: fixed;
+            left: 16px;
+            bottom: 16px;
+            z-index: 10;
+            font-size: small;
+            color: #099c0a;
+            transform-origin: left bottom;
             pointer-events: none;
         }
     </style>
@@ -280,16 +335,20 @@
     <img src="loading.gif" id="hourglass" alt="coming soon to a university near you.">
     <h1 id="timer">DD:HH:MM:SS</h1>
     <small>dd:hh:mm:ss</small><br/><br/>
-    <a href="https://vcaa.vic.edu.au/administration/key-dates/vce-examination-timetable" class="alink" target="_blank">
+    <a href="https://vcaa.vic.edu.au/administration/key-dates/vce-examination-timetable" class="alink" id="exam_link"
+       target="_blank">
         <h3 id="exam_name">2026 VCE examination timetable</h3></a>
     <button type="button" class="btn" id="exam_pick">pick your exam</button>
     <button type="button" class="btn" id="side_add">add side clocks</button>
     <br/>
-    <a href="https://classani.org/?ref=atar.bobbedbob.io"
-       class="ad" target="_blank" rel="sponsored noopener">
-        <small class="ad_label">SELF PROMO</small>
-        <span class="ad_text">want to tutor? find students, run classes, get paid, all in one. no agency, no cut. free on Classani.</span>
-    </a>
+    <div class="plug" id="plug">
+        <a href="https://classani.org/?ref=atar.bobbedbob.io"
+           class="plug_link" target="_blank" rel="sponsored noopener">
+            <small class="plug_label">SELF PROMO</small>
+            <span class="plug_text" id="plug_text">want to tutor? find students, run classes, get paid, all in one. no agency, no cut. free on Classani.</span>
+        </a>
+        <button type="button" class="plug_toggle" id="plug_toggle" aria-controls="plug_text" aria-expanded="true">×</button>
+    </div>
 </div>
 <ul id="side_clocks" aria-label="Side clocks" hidden></ul>
 <dialog id="exam_modal" aria-labelledby="exam_modal_title">
@@ -310,6 +369,7 @@
         <img src="allroadsleadtorome.jpg" width="100" height="126" alt="coming soon to a university near you.">
         <br/></footer>
 </div>
+<div class="score" id="score" aria-live="polite" hidden>hourglasses popped: <span id="score_count">0</span></div>
 <script src="countdown.js"></script>
 </body>
 </html>
