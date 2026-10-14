@@ -1,83 +1,3 @@
-// 2026 VCE written examination timetable (start times, Melbourne time / AEDT UTC+11).
-// Source: https://vcaa.vic.edu.au/sites/default/files/2026-10/VCEExamsTimetable2026.pdf
-// Oral/performance exams and the Extended Investigation are scheduled individually, so they're not included.
-const EXAMS = [
-    {start: "2026-10-15T08:00:00+11:00", exams: ["Auslan Sign Comprehension and Sign Production"]},
-    {start: "2026-10-15T09:25:00+11:00", exams: ["Classical Hebrew"]},
-    {
-        start: "2026-10-15T14:00:00+11:00", exams: [
-            "Armenian", "Bengali", "Bosnian", "Chin Hakha", "Croatian", "Dutch", "Filipino", "Hebrew", "Hindi",
-            "Hungarian", "Karen", "Khmer", "Macedonian", "Persian", "Polish", "Portuguese", "Punjabi", "Romanian",
-            "Russian", "Serbian", "Sinhala", "Swedish", "Tamil", "Turkish"
-        ]
-    },
-    {start: "2026-10-16T13:55:00+11:00", exams: ["Classical Greek"]},
-
-    {start: "2026-10-27T09:00:00+11:00", exams: ["English", "English as an Additional Language (EAL)"]},
-
-    {start: "2026-10-28T09:00:00+11:00", exams: ["Agricultural and Horticultural Studies"]},
-    {start: "2026-10-28T11:45:00+11:00", exams: ["Art Making and Exhibiting"]},
-    {start: "2026-10-28T15:00:00+11:00", exams: ["English Language", "Indonesian First Language", "Vietnamese First Language"]},
-
-    {start: "2026-10-29T09:00:00+11:00", exams: ["VET Business", "VET Community Services", "Theatre Studies"]},
-    {start: "2026-10-29T11:45:00+11:00", exams: ["Economics"]},
-    {start: "2026-10-29T15:00:00+11:00", exams: ["Chinese First Language", "Japanese First Language", "Korean First Language", "Literature"]},
-
-    {start: "2026-10-30T09:00:00+11:00", exams: ["Psychology"]},
-    {start: "2026-10-30T14:00:00+11:00", exams: ["General Mathematics Examination 1"]},
-
-    {start: "2026-11-02T09:00:00+11:00", exams: ["Biology"]},
-    {start: "2026-11-02T14:00:00+11:00", exams: ["General Mathematics Examination 2"]},
-
-    // Tuesday 3 November: Melbourne Cup public holiday
-
-    {start: "2026-11-04T09:00:00+11:00", exams: ["Art Creative Practice", "VET Engineering Studies", "VET Health Allied", "VET Health Services Assistance"]},
-    {start: "2026-11-04T11:45:00+11:00", exams: ["Aboriginal Languages of Victoria", "Algorithmics (HESS)", "Classical Studies", "Korean Second Language", "Vietnamese Second Language"]},
-    {start: "2026-11-04T15:00:00+11:00", exams: ["Business Management"]},
-
-    {start: "2026-11-05T09:00:00+11:00", exams: ["Mathematical Methods Examination 1", "Music Composition"]},
-    {start: "2026-11-05T11:45:00+11:00", exams: ["VET Equine Studies", "VET Hospitality"]},
-    {start: "2026-11-05T15:00:00+11:00", exams: ["Chinese Language, Culture and Society", "Health and Human Development"]},
-
-    {start: "2026-11-06T09:00:00+11:00", exams: ["Dance", "VET Integrated Technologies"]},
-    {start: "2026-11-06T11:45:00+11:00", exams: ["Mathematical Methods Examination 2"]},
-    {start: "2026-11-06T15:00:00+11:00", exams: ["Arabic", "Legal Studies", "VET Creative and Digital Media"]},
-
-    {start: "2026-11-09T09:00:00+11:00", exams: ["Music Inquiry", "Specialist Mathematics Examination 1"]},
-    {start: "2026-11-09T11:45:00+11:00", exams: ["Applied Computing: Data Analytics", "Physical Education", "Spanish"]},
-    {start: "2026-11-09T15:00:00+11:00", exams: ["History: Revolutions", "Industry and Enterprise"]},
-
-    {start: "2026-11-10T09:00:00+11:00", exams: ["Chemistry"]},
-    {start: "2026-11-10T14:00:00+11:00", exams: ["Environmental Science", "Greek", "Media", "Text and Traditions"]},
-
-    {start: "2026-11-11T09:00:00+11:00", exams: ["VET Furnishing", "Visual Communication Design"]},
-    {start: "2026-11-11T11:45:00+11:00", exams: ["History: Australian History", "Outdoor and Environmental Studies", "Specialist Mathematics Examination 2"]},
-    {start: "2026-11-11T15:00:00+11:00", exams: ["Accounting"]},
-
-    {start: "2026-11-12T09:00:00+11:00", exams: ["Physics"]},
-    {start: "2026-11-12T14:00:00+11:00", exams: ["History: Ancient History", "Geography", "Sociology"]},
-
-    {start: "2026-11-13T09:00:00+11:00", exams: ["Product Design and Technologies", "VET Information and Communications Technology", "VET Music (Sound Production)"]},
-    {start: "2026-11-13T11:45:00+11:00", exams: ["Drama", "VET Sport and Recreation"]},
-    {start: "2026-11-13T15:00:00+11:00", exams: ["Applied Computing: Software Development", "German", "Philosophy"]},
-
-    {start: "2026-11-16T09:00:00+11:00", exams: ["Food Studies"]},
-    {start: "2026-11-16T11:45:00+11:00", exams: ["VET Hospitality (Cookery)", "VET Laboratory Skills", "Systems Engineering"]},
-    {start: "2026-11-16T15:00:00+11:00", exams: ["Latin", "Politics", "Religion and Society"]},
-
-    {start: "2026-11-17T09:00:00+11:00", exams: ["Music Contemporary Performance", "Music Repertoire Performance"]},
-    {start: "2026-11-17T11:45:00+11:00", exams: ["Indonesian Second Language", "Italian"]},
-    {start: "2026-11-17T15:00:00+11:00", exams: ["Foundation Mathematics", "French"]},
-
-    {start: "2026-11-18T09:00:00+11:00", exams: ["Japanese Second Language"]},
-    {start: "2026-11-18T14:00:00+11:00", exams: ["Chinese Second Language", "Chinese Second Language Advanced"]},
-
-    // Not an exam, but worth counting down to. Source: https://vtac.edu.au/dates
-    {start: "2026-12-10T07:00:00+11:00", exams: ["ATAR & study scores release"], release: true},
-].map(session => ({...session, time: new Date(session.start).getTime()}))
-
-const RESULTS_URL = "https://resultsandatar.vic.edu.au/"
-
 const MONTHS = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"]
 
@@ -86,7 +6,7 @@ function formatStart(iso) {
     const [date, rest] = iso.split("T")
     const [year, month, day] = date.split("-")
     return rest.slice(0, 8) + ", " + Number(day) + " " + MONTHS[Number(month) - 1] + " " + year +
-        " (UTC" + rest.slice(8, 11).replace(/^([+-])0/, "$1") + ")"
+        " (UTC" + rest.slice(8).replace(/^([+-])0/, "$1").replace(/:00$/, "") + ")"
 }
 
 // "2026-10-27T09:00:00+11:00" -> "Tue 27 Oct, 09:00"
@@ -96,23 +16,70 @@ function formatShort(iso) {
     return day + " " + date.getUTCDate() + " " + MONTHS[date.getUTCMonth()].slice(0, 3) + ", " + iso.slice(11, 16)
 }
 
-// Every exam on its own, so one can be picked and tracked
-const EXAM_LIST = EXAMS.flatMap(session => session.exams.map(name => ({
-    name, start: session.start, time: session.time, release: Boolean(session.release),
-})))
-
+const SYSTEM_STORAGE_KEY = "examSystem"
 const STORAGE_KEY = "trackedExam"
 const SIDE_STORAGE_KEY = "sideExams"
 
+// Which state's exams are shown (see exams.js)
+let system
+// That state's exam sessions, in order
+let sessions
+// Every exam on its own, so one can be picked and tracked
+let examList
 // null means "whatever exam is next"
-let trackedExam = loadTrackedExam()
+let trackedExam
 // extra clocks shown on the side of the screen
-let sideExams = loadSideExams()
+let sideExams
+
+useSystem(loadSystem())
+
+// A saved choice, otherwise a guess from the browser's time zone, otherwise VIC
+function loadSystem() {
+    try {
+        const saved = SYSTEMS.find(other => other.id === localStorage.getItem(SYSTEM_STORAGE_KEY))
+        if (saved) return saved
+    } catch (e) {
+        // storage unavailable, fall through to guessing
+    }
+    try {
+        const zone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        const guess = SYSTEMS.find(other => other.timeZones.includes(zone))
+        if (guess) return guess
+    } catch (e) {
+        // no Intl, just use the default
+    }
+    return SYSTEMS[0]
+}
+
+function saveSystem() {
+    try {
+        localStorage.setItem(SYSTEM_STORAGE_KEY, system.id)
+    } catch (e) {
+        // storage unavailable, the choice just won't persist
+    }
+}
+
+function useSystem(next) {
+    system = next
+    sessions = next.sessions.map(session => ({...session, time: new Date(session.start).getTime()}))
+    examList = sessions.flatMap(session => session.exams.map(name => ({
+        name, start: session.start, time: session.time, release: Boolean(session.release), info: session.info,
+    })))
+    trackedExam = loadTrackedExam()
+    sideExams = loadSideExams()
+    document.title = system.name + " Exams 2026 Countdown"
+}
+
+// Selections are saved per state, since exam names repeat between states.
+// VIC keeps the original keys so selections saved before other states were added still load.
+function storageKey(base) {
+    return system.id === "vic" ? base : base + ":" + system.id
+}
 
 function loadTrackedExam() {
     try {
-        const name = localStorage.getItem(STORAGE_KEY)
-        return EXAM_LIST.find(exam => exam.name === name) || null
+        const name = localStorage.getItem(storageKey(STORAGE_KEY))
+        return examList.find(exam => exam.name === name) || null
     } catch (e) {
         return null
     }
@@ -120,8 +87,8 @@ function loadTrackedExam() {
 
 function saveTrackedExam(exam) {
     try {
-        if (exam) localStorage.setItem(STORAGE_KEY, exam.name)
-        else localStorage.removeItem(STORAGE_KEY)
+        if (exam) localStorage.setItem(storageKey(STORAGE_KEY), exam.name)
+        else localStorage.removeItem(storageKey(STORAGE_KEY))
     } catch (e) {
         // storage unavailable (private window etc.), selection just won't persist
     }
@@ -129,8 +96,8 @@ function saveTrackedExam(exam) {
 
 function loadSideExams() {
     try {
-        const names = JSON.parse(localStorage.getItem(SIDE_STORAGE_KEY) || "[]")
-        return Array.isArray(names) ? EXAM_LIST.filter(exam => names.includes(exam.name)) : []
+        const names = JSON.parse(localStorage.getItem(storageKey(SIDE_STORAGE_KEY)) || "[]")
+        return Array.isArray(names) ? examList.filter(exam => names.includes(exam.name)) : []
     } catch (e) {
         return []
     }
@@ -138,14 +105,21 @@ function loadSideExams() {
 
 function saveSideExams() {
     try {
-        localStorage.setItem(SIDE_STORAGE_KEY, JSON.stringify(sideExams.map(exam => exam.name)))
+        localStorage.setItem(storageKey(SIDE_STORAGE_KEY), JSON.stringify(sideExams.map(exam => exam.name)))
     } catch (e) {
         // same as above
     }
 }
 
+// Some sessions have 20+ language exams at once, so long lists get cut down to keep the heading short.
+// The full list is still in the exam picker.
+function listExams(names) {
+    if (names.length <= 4) return names.join(", ")
+    return names.slice(0, 3).join(", ") + " + " + (names.length - 3) + " more"
+}
+
 function nextSession(now) {
-    return EXAMS.find(session => session.time > now)
+    return sessions.find(session => session.time > now)
 }
 
 function setText(id, text) {
@@ -155,6 +129,7 @@ function setText(id, text) {
 
 // Footer line for an exam session, or for the results release
 function startText(entry, now) {
+    if (entry.info) return entry.info
     const when = formatStart(entry.start)
     if (entry.release) return (entry.time > now ? "Results will be released at " : "Results were released at ") + when
     return (entry.time > now ? "This exam will start at " : "This exam started at ") + when
@@ -163,11 +138,9 @@ function startText(entry, now) {
 // The heading links to the timetable, or to the results site when that's what's being counted down to
 function setLink(release) {
     const linkEl = document.getElementById("exam_link")
-    const href = release ? RESULTS_URL : TIMETABLE_URL
+    const href = release ? system.resultsUrl : system.timetableUrl
     if (linkEl && linkEl.href !== href) linkEl.href = href
 }
-
-const TIMETABLE_URL = document.getElementById("exam_link")?.href
 
 // The time being counted down to, or null when there's nothing left to count down to
 function showTarget(now) {
@@ -186,14 +159,14 @@ function showTarget(now) {
 
     const session = nextSession(now)
     if (!session) {
-        const last = EXAMS[EXAMS.length - 1]
+        const last = sessions[sessions.length - 1]
         setLink(last.release)
-        setText("exam_name", last.release ? "Results are out! Check your ATAR" : "That's all the 2026 VCE exams. Go touch grass.")
+        setText("exam_name", last.release ? "Results are out! Check your ATAR" : "That's all the 2026 " + system.name + " exams. Go touch grass.")
         setText("exam_info", startText(last, now))
         return null
     }
     setLink(session.release)
-    setText("exam_name", "Next up: " + session.exams.join(", "))
+    setText("exam_name", "Next up: " + listExams(session.exams))
     setText("exam_info", startText(session, now))
     return session.time
 }
@@ -268,7 +241,7 @@ let sideClocks = []
 function toggleSideExam(exam) {
     sideExams = sideExams.includes(exam)
         ? sideExams.filter(other => other !== exam)
-        : EXAM_LIST.filter(other => other === exam || sideExams.includes(other))
+        : examList.filter(other => other === exam || sideExams.includes(other))
     saveSideExams()
     renderSideClocks()
     restart()
@@ -278,7 +251,7 @@ function toggleSideExam(exam) {
 function focusSideExam(exam) {
     const previous = trackedExam
     // "whatever's next" has no single exam to send to the side, so it just gets replaced
-    sideExams = EXAM_LIST.filter(other => other === previous || (other !== exam && sideExams.includes(other)))
+    sideExams = examList.filter(other => other === previous || (other !== exam && sideExams.includes(other)))
     saveSideExams()
     renderSideClocks()
     trackExam(exam)
@@ -326,6 +299,19 @@ function renderSideClocks() {
 
 renderSideClocks()
 restart()
+
+// State/territory switcher
+const systemPickEl = document.getElementById("system_pick")
+if (systemPickEl) {
+    for (const option of SYSTEMS) systemPickEl.add(new Option(option.label, option.id))
+    systemPickEl.value = system.id
+    systemPickEl.addEventListener("change", function () {
+        useSystem(SYSTEMS.find(option => option.id === systemPickEl.value))
+        saveSystem()
+        renderSideClocks()
+        restart()
+    })
+}
 
 // Exam picker modal, used both for the main clock ("track") and the side clocks ("side")
 const modal = document.getElementById("exam_modal")
@@ -375,8 +361,8 @@ function renderExamList() {
     examListEl.replaceChildren()
 
     // Selected exams go on top, past exams are hidden unless they're selected
-    const selected = EXAM_LIST.filter(isSelected)
-    const rest = EXAM_LIST.filter(exam => exam.time > now && !isSelected(exam))
+    const selected = examList.filter(isSelected)
+    const rest = examList.filter(exam => exam.time > now && !isSelected(exam))
 
     selected.forEach(exam => examListEl.appendChild(examOption(exam.name, formatShort(exam.start), exam)))
     if (modalMode === "track") examListEl.appendChild(examOption("Whatever's next", null, null))

@@ -41,8 +41,33 @@
             margin-bottom: 0;
         }
 
+        /* even line lengths when an exam name wraps, instead of one word on its own */
+        #exam_name {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            text-wrap: balance;
+        }
+
         footer {
             font-size: medium;
+        }
+
+        .disclaimer {
+            display: inline-block;
+            margin: 6px 16px;
+            font-size: small;
+            line-height: 1.45;
+            color: #aaa;
+            text-wrap: balance;
+        }
+
+        .disclaimer a {
+            color: inherit;
+        }
+
+        .disclaimer a:hover, .disclaimer a:focus-visible {
+            color: whitesmoke;
         }
 
         i {
@@ -76,6 +101,7 @@
         .btn:hover, .btn:focus-visible {
             background-color: #222;
         }
+
 
         dialog {
             font-family: inherit;
@@ -323,16 +349,58 @@
             cursor: crosshair;
         }
 
-        /* how many have been popped */
-        .score {
+        /* bottom left corner: the hourglass score sits above the state/territory switcher */
+        .corner {
             position: fixed;
             left: 16px;
             bottom: 16px;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        /* room at the end of the page so the corner doesn't cover the footer */
+        body {
+            padding-bottom: 64px;
+        }
+
+        /* phones don't have a spare corner, so it goes at the bottom of the page instead of floating over the text */
+        @media (max-width: 600px) {
+            .corner {
+                position: static;
+                margin-top: 20px;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+        }
+
+        /* how many have been popped */
+        .score {
             font-size: small;
             color: #099c0a;
             transform-origin: left bottom;
             pointer-events: none;
+        }
+
+        /* switching state isn't a common action, so it's small and out of the way.
+           Needs a solid background so the dropdown isn't white on some browsers */
+        #system_pick {
+            font: inherit;
+            font-size: small;
+            color: grey;
+            background-color: black;
+            border: 1px solid grey;
+            padding: 2px 4px;
+            cursor: pointer;
+        }
+
+        #system_pick:hover, #system_pick:focus-visible {
+            color: whitesmoke;
+            border-color: whitesmoke;
         }
     </style>
 </head>
@@ -368,6 +436,8 @@
     <br/><br/>
     <footer>
         <span id="exam_info">2026 VCE written exams run from 15 October to 18 November 2026</span><br/>
+        <small class="disclaimer">Not official! Double-check your official timetable.
+            Something off? Email <a href="mailto:bob@bobbedbob.io">bob@bobbedbob.io</a></small><br/>
         Made with <span style="color: red" class="material-symbols-outlined inline">favorite</span> by <a
             target="_blank" class="alink"
             href="https://bobbedbob.io/">bobbedbob</a>.
@@ -375,7 +445,11 @@
         <img src="allroadsleadtorome.jpg" width="100" height="126" alt="coming soon to a university near you.">
         <br/></footer>
 </div>
-<div class="score" id="score" aria-live="polite" hidden>hourglasses popped: <span id="score_count">0</span></div>
+<div class="corner">
+    <div class="score" id="score" aria-live="polite" hidden>hourglasses popped: <span id="score_count">0</span></div>
+    <select id="system_pick" aria-label="State or territory" title="Switch state or territory"></select>
+</div>
+<script src="exams.js"></script>
 <script src="countdown.js"></script>
 </body>
 </html>
