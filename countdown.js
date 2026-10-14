@@ -424,24 +424,23 @@ const plugEl = document.getElementById("plug")
 const plugToggleEl = document.getElementById("plug_toggle")
 const PLUG_STORAGE_KEY = "plugCollapsed"
 
-// Collapsing shrinks it down to just the label, and the choice is remembered
+// Collapsing shrinks it down to just the label. It starts collapsed, and the choice is remembered
 function setPlugCollapsed(collapsed) {
     plugEl.classList.toggle("collapsed", collapsed)
     plugToggleEl.textContent = collapsed ? "+" : "×"
     plugToggleEl.title = collapsed ? "Expand" : "Collapse"
     plugToggleEl.setAttribute("aria-expanded", String(!collapsed))
     try {
-        if (collapsed) localStorage.setItem(PLUG_STORAGE_KEY, "1")
-        else localStorage.removeItem(PLUG_STORAGE_KEY)
+        localStorage.setItem(PLUG_STORAGE_KEY, collapsed ? "1" : "0")
     } catch (e) {
         // storage unavailable, it just won't be remembered
     }
 }
 
 if (plugEl && plugToggleEl) {
-    let collapsed = false
+    let collapsed = true
     try {
-        collapsed = localStorage.getItem(PLUG_STORAGE_KEY) === "1"
+        collapsed = localStorage.getItem(PLUG_STORAGE_KEY) !== "0"
     } catch (e) {
         // same as above
     }
