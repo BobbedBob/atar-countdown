@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atar.bobbedbob.io/sitemap.xml

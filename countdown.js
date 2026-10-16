@@ -19,6 +19,7 @@ function formatShort(iso) {
 const SYSTEM_STORAGE_KEY = "examSystem"
 const STORAGE_KEY = "trackedExam"
 const SIDE_STORAGE_KEY = "sideExams"
+const PAGE_TITLE = document.title
 
 // Which state's exams are shown (see exams.js)
 let system
@@ -67,7 +68,8 @@ function useSystem(next) {
     })))
     trackedExam = loadTrackedExam()
     sideExams = loadSideExams()
-    document.title = system.name + " Exams 2026 Countdown"
+    // VIC (the default, and what search crawlers get) keeps the page's own title, which names every state
+    document.title = next === SYSTEMS[0] ? PAGE_TITLE : "2026 " + next.name + " Exam Countdown | ATAR Countdown"
 }
 
 // Selections are saved per state, since exam names repeat between states.

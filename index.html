@@ -4,13 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="allroadsleadtorome.jpg">
-    <title>VCE Exams 2026 Countdown</title>
-    <meta property="og:title" content="2026 VCE Exams Countdown"/>
+    <link rel="icon" type="image/jpeg" href="allroadsleadtorome.jpg">
+    <link rel="apple-touch-icon" href="allroadsleadtorome.jpg">
+    <title>2026 VCE, HSC &amp; QCE Exam Countdown | ATAR Countdown</title>
+    <meta name="description"
+          content="Live countdown to every 2026 Year 12 exam: VCE, HSC, QCE, SACE, WACE, TCE and ACT. Pick your subject, track several exams at once, and count down to ATAR results.">
+    <link rel="canonical" href="https://atar.bobbedbob.io/">
+    <meta name="theme-color" content="#000000">
+    <meta property="og:title" content="2026 VCE, HSC &amp; QCE Exam Countdown"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://atar.bobbedbob.io/"/>
-    <meta property="og:image" content="allroadsleadtorome.jpg"/>
-    <meta property="og:description" content="all roads lead to rome">
+    <meta property="og:site_name" content="ATAR Countdown"/>
+    <meta property="og:locale" content="en_AU"/>
+    <!-- link previews need an absolute image URL -->
+    <meta property="og:image" content="https://atar.bobbedbob.io/allroadsleadtorome.jpg"/>
+    <meta property="og:image:width" content="1400"/>
+    <meta property="og:image:height" content="1764"/>
+    <meta property="og:image:alt" content="all roads lead to rome"/>
+    <meta property="og:description"
+          content="all roads lead to rome. Live countdown to every 2026 Year 12 exam and ATAR results day, for every state.">
+    <meta name="twitter:card" content="summary"/>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "ATAR Countdown",
+            "url": "https://atar.bobbedbob.io/",
+            "description": "Live countdown to every 2026 Year 12 exam (VCE, HSC, QCE, SACE, WACE, TCE and ACT) and ATAR results day.",
+            "inLanguage": "en-AU"
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
@@ -26,13 +49,12 @@
             color: whitesmoke;
         }
 
-        h1 {
-            margin-bottom: -10px;
-        }
-
-        /* shrinks so all 15 characters fit across a phone screen (each is about 0.6em wide) */
+        /* shrinks so all 15 characters fit across a phone screen (each is about 0.6em wide).
+           Not a heading, so search results show the exam name instead of a row of digits */
         #timer {
             font-size: min(2em, calc((100vw - 32px) / 9));
+            font-weight: bold;
+            margin: 0.67em 0 -10px;
             white-space: nowrap;
         }
 
@@ -41,11 +63,12 @@
             margin-bottom: 0;
         }
 
-        /* even line lengths when an exam name wraps, instead of one word on its own */
+        /* the page's main heading, sized like the h3 it used to be.
+           Even line lengths when an exam name wraps, instead of one word on its own */
         #exam_name {
+            font-size: 1.17em;
             max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 5px auto 0;
             text-wrap: balance;
         }
 
@@ -414,12 +437,12 @@
 </head>
 <body>
 <div class="container" style="justify-content: center; text-align: center;">
-    <img src="loading.gif" id="hourglass" alt="coming soon to a university near you.">
-    <h1 id="timer">DD:HH:MM:SS</h1>
+    <img src="loading.gif" id="hourglass" width="258" height="272" alt="coming soon to a university near you.">
+    <div id="timer" role="timer">DD:HH:MM:SS</div>
     <small>dd:hh:mm:ss</small><br/><br/>
     <a href="https://vcaa.vic.edu.au/administration/key-dates/vce-examination-timetable" class="alink" id="exam_link"
        target="_blank">
-        <h3 id="exam_name">2026 VCE examination timetable</h3></a>
+        <h1 id="exam_name">2026 VCE examination timetable</h1></a>
     <button type="button" class="btn" id="exam_pick">pick your exam</button>
     <button type="button" class="btn" id="side_shove" hidden>shove to side</button>
     <button type="button" class="btn" id="side_add">add side clocks</button>
@@ -451,7 +474,7 @@
             target="_blank" class="alink"
             href="https://bobbedbob.io/">bobbedbob</a>.
         <br/>
-        <img src="allroadsleadtorome.jpg" width="100" height="126" alt="coming soon to a university near you.">
+        <img src="allroadsleadtorome.jpg" width="100" height="126" loading="lazy" alt="coming soon to a university near you.">
         <br/></footer>
 </div>
 <div class="corner">
